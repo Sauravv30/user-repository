@@ -1,0 +1,243 @@
+openapi: 3.0.3
+info:
+  title: HRS Hotels Booking
+  description: |-
+    This is a microservice application that used to do create, delete, update and get request for users
+
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: sauravv30@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://localhost:8080/api/v1
+tags:
+  - name: user
+    description: User api
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+
+paths:
+  /user/{userId}:
+    get:
+      tags:
+        - user
+      summary: Get user by id
+      description: Get user by id
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          description: Id of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+        '405':
+          description: Validation exception
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: Login user
+      description: Login user
+      operationId: loginUser
+      requestBody:
+        description: Login user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+        '405':
+          description: Validation exception
+  /user/register:
+    post:
+      tags:
+        - user
+      summary: Create user details
+      description: Create user details in catalog
+      operationId: registerUser
+      requestBody:
+        description: Create a new user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+        '405':
+          description: Validation exception
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /user/delete/{userId}:
+    delete:
+      tags:
+        - user
+      summary: Delete user details by id
+      description: Delete user details by id
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: Delete the user by user id
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Delete'
+
+        '400':
+          description: Invalid status value
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+  /user/update/{userId}:
+    put:
+      tags:
+        - user
+      summary: Update user details by id
+      description: Update user details by id
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          description: Update the user by user id
+          required: true
+          explode: true
+          schema:
+            type: integer
+            format: int64
+
+      requestBody:
+        description: Update existing user details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+        '400':
+          description: Invalid status value
+      security:
+        - petstore_auth:
+            - write:pets
+            - read:pets
+components:
+  schemas:
+    User:
+      required:
+        - username
+        - email
+        - mobile
+        - password
+        - role
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        mobile:
+          type: integer
+          format: int64
+        password:
+          type: string
+          format: password
+        role:
+          type: string
+    Delete:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        status:
+          type: string
+      xml:
+        name: category
+    Error:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+        errorMessage:
+          type: string
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: modify pets in your account
+            read:pets: read your pets
