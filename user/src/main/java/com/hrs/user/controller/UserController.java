@@ -23,28 +23,59 @@ public class UserController implements UserApi {
 
     private UserService userService;
 
+    /**
+     * Delete user response entity.
+     *
+     * @param userId the user id
+     * @return the response entity
+     */
     @Override
     public ResponseEntity<Delete> deleteUser(Long userId) {
         userService.deleteUserById(userId);
         return new ResponseEntity<>(new Delete().id(userId).status("User deleted"), HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Gets user by id.
+     *
+     * @param userId the user id
+     * @return the user by id
+     */
     @Override
     public ResponseEntity<User> getUserById(Long userId) {
         return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
     }
 
+    /**
+     * Login user response entity.
+     *
+     * @param user the user
+     * @return the response entity
+     */
     @Override
     public ResponseEntity<AuthResponse> loginUser(User user) {
 
         return new ResponseEntity<>(userService.loginUser(user),HttpStatus.OK);
     }
 
+    /**
+     * Register user response entity.
+     *
+     * @param user the user
+     * @return the response entity
+     */
     @Override
     public ResponseEntity<AuthResponse> registerUser(User user) {
         return new ResponseEntity<>(userService.registerUser(user),HttpStatus.CREATED);
     }
 
+    /**
+     * Update user response entity.
+     *
+     * @param userId the user id
+     * @param user   the user
+     * @return the response entity
+     */
     @Override
     public ResponseEntity<User> updateUser(Long userId, User user) {
         return new ResponseEntity<>(userService.updateUser(userId,user), HttpStatus.OK);
