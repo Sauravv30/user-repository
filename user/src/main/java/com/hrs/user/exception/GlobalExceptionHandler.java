@@ -23,4 +23,9 @@ public class GlobalExceptionHandler {
         return  new ResponseEntity<>(new Error().errorCode(404).errorMessage(exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<Error> customException(CustomException exception){
+        return  new ResponseEntity<>(new Error().errorCode(500).errorMessage(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }
