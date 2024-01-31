@@ -100,7 +100,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
+                $ref: '#/components/schemas/CustomResponse'
 
         '400':
           description: Invalid ID supplied
@@ -200,8 +200,7 @@ components:
           type: string
           format: email
         mobile:
-          type: integer
-          format: int64
+          type: string
         password:
           type: string
           format: password
@@ -231,6 +230,14 @@ components:
         accessToken:
           type: string
         refreshToken:
+          type: string
+    CustomResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        message:
           type: string
   securitySchemes:
     petstore_auth:

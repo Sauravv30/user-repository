@@ -9,8 +9,12 @@ import lombok.Setter;
  * The type User entity.
  */
 @Entity
+@Table(name = "UserEntity", uniqueConstraints = {
+        @UniqueConstraint(name = "uc_userentity_username_email", columnNames = {"username", "email", "mobile"})
+})
 @Getter
 @Setter
+
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user-sequence")
@@ -18,6 +22,7 @@ public class UserEntity {
     @Column(name = "id", nullable = false)
     private Long id;
     @NotNull
+
     private String username;
     @NotNull
     private String email;

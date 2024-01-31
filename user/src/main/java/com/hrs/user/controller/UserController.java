@@ -3,6 +3,7 @@ package com.hrs.user.controller;
 import com.hrs.user.api.UserApi;
 import com.hrs.user.model.AuthResponse;
 import com.hrs.user.model.Delete;
+import com.hrs.user.model.CustomResponse;
 import com.hrs.user.model.User;
 import com.hrs.user.service.UserService;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @Validated
-@CrossOrigin("lb://HOTEL-GATEWAY")
 public class UserController implements UserApi {
 
     private UserService userService;
@@ -65,7 +65,7 @@ public class UserController implements UserApi {
      * @return the response entity
      */
     @Override
-    public ResponseEntity<AuthResponse> registerUser(User user) {
+    public ResponseEntity<CustomResponse> registerUser(User user) {
         return new ResponseEntity<>(userService.registerUser(user),HttpStatus.CREATED);
     }
 

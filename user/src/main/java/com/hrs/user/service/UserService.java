@@ -6,6 +6,7 @@ import com.hrs.user.exception.NotFoundCustomException;
 import com.hrs.user.mapper.UserMapper;
 import com.hrs.user.model.AuthResponse;
 import com.hrs.user.model.User;
+import com.hrs.user.model.CustomResponse;
 import com.hrs.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,12 +30,13 @@ public class UserService {
      * @param user the user
      * @return the auth response
      */
-    public AuthResponse registerUser(User user) {
+    public CustomResponse registerUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new CustomException("Username already preserved, please choose another username");
         }
         UserEntity persistedEntity = userRepository.save(userMapper.modelToEntity(user));
-        return createAuthResponse(persistedEntity);
+
+        return new CustomResponse().userId(persistedEntity.getId()).message("User Registered");
     }
 
     /**
@@ -45,7 +47,7 @@ public class UserService {
      */
     public AuthResponse loginUser(User user) {
         UserEntity persistedEntity = userRepository.findByUsernameAndPassword
-                (user.getUsername(), user.getPassword()).orElseThrow(() -> new NotFoundCustomException("User not found"));
+                (user.getUsername(), user.getPassword()).orElseThrow(() -> new NotFoundCustomException("Authentication error"));
         return createAuthResponse(persistedEntity);
     }
 
